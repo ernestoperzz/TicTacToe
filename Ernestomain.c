@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include<stdlib.h>
+#include<time.h>
 
 char board[3][3] = { {'X', ' ', ' '}, {'X', 'O', ' '}, {'X', ' ', 'O'} };
 int i;
@@ -64,19 +66,20 @@ int validGo(int x, int y) {
             return 1;
         }
         else if (board[y][x] == 'O') {
-
-        } return 1;
+            return 1;
+        }
 
     //If the go is valid
         if (x>0 && y>0 && x<3 && y<3 ) {
+
 
             return 0;
         }
 } 
 
-int computersGo(int x, int y) {
-
-
-
-
+int computersGo(int *px, int *py) {
+    int range;
+    range = (2-0) + 1;
+    srand(time(NULL));
+    printf("%i", rand() % range + 0);
 }
