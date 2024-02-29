@@ -10,7 +10,7 @@ int main() {
     char CurrentGo = 'X', UserName[50];
     int y, x;
     char y_temp;
-
+    
 
     //Welcome User and get user name
     printf("Welcome to X's and O's. Please enter your username: ");
