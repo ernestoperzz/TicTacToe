@@ -3,7 +3,7 @@
 #include<time.h>
 
 char board[3][3] = { {'X', ' ', ' '}, {'X', 'O', ' '}, {'X', ' ', 'O'} };
-int i;
+int i, j;
 void printboard();
 
 int main() {
@@ -76,10 +76,17 @@ int validGo(int x, int y) {
             return 0;
         }
 } 
-
-int computersGo(int *px, int *py) {
+//generate computers location
+void computersGo(int* px, int* py) {
     int range;
-    range = (2-0) + 1;
+    range = (2 - 0) + 1;
     srand(time(NULL));
-    printf("%i", rand() % range + 0);
+    *px = rand() % range + 0;
+    *py = rand() % range + 0;
+}
+
+//find out if one of the players has won
+
+int whoWOn() {
+   for(i = 0)
 }
