@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char board[3][3] = { {'X', ' ', ' '}, {'X', 'O', ' '}, {'X', ' ', 'O'} };
+char board[3][3] = { {' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '} };
 
 void printboard();
 int validGo();
@@ -33,51 +33,56 @@ int main() {
                 printboard();
 
                 //While loop to continue asking untill a valid go.
-                while (1 == 1) {
-                    printf("Enter a letter: ");
-                    scanf_s(" %c", &y_temp);
+                int IsValid = 2;
+                while (IsValid != 0) {
+                    printf("Enter your go: ");
+                    scanf(" %c%i", &y_temp, &x);
 
                     //Stored as a char then convered to a valid cord.
-                    if (y_temp == 'a') {
+                    if (y_temp >= 'a' && y_temp <= 'c') {
+                        //If lowercase letter entered
                         y = (int)y_temp - 97;
                     }
                     else {
+                        //If uppercase letter entered
                         y = (int)y_temp - 65;
                     }
-
-                    //Ask for the second number and convert it
-                    printf("Enter a Number: ");
-                    scanf_s("%i", &x);
+                    //Take one away from x to make it a valid cord.
                     x -= 1;
 
                     //Check if its a valid go
-                    int returned_value = validGo(x, y);
+                    IsValid = validGo(x, y);
 
-                    if (returned_value == 0) {
-                        board[y][x] = 'X';
-                        break;
-                    }
-                    else if (returned_value == 1) {
-                        printf("Place is taken go again. Go again.\n");
-                    }
-                    else if (returned_value == 2) {
-                        printf("Place is out of bounds. Go again.\n");
+                    //Swtich to choose response to valid go.
+                    switch(IsValid){
+                        case 0:
+                            board[y][x] = CurrentGo;
+                            break;
+                        case 1:
+                            printf("Place is already taken. Go again.\n");
+                            break;
+                        case 2:
+                            printf("Place is out of bounds. Go again.\n");
+                            break;
                     }
                 }
-                printf("%i, %i\n", y, x);
+                //Give control to computer. Players turn ends here
+                CurrentGo = 'O';
             }
             if (CurrentGo == 'O') {
-                //Computers go
+                //Computers go.
             }
             //Winning Code goes here.
         }
         printf("Would you like to play again?");
+        //Printing the score and asking to play agian goes here.
 
         
     }
 }
 
 int validGo(int x, int y) {
+    //WIP
     return 0;
 }
 
