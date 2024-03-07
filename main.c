@@ -36,7 +36,7 @@ int main() {
                 int IsValid = 2;
                 while (IsValid != 0) {
                     printf("Enter your go: ");
-                    scanf(" %c%i", &y_temp, &x);
+                    scanf_s(" %c%i", &y_temp, &x);
 
                     //Stored as a char then convered to a valid cord.
                     if (y_temp >= 'a' && y_temp <= 'c') {
@@ -70,7 +70,12 @@ int main() {
                 CurrentGo = 'O';
             }
             if (CurrentGo == 'O') {
-                //Computers go.
+                int IsValid = 1;
+                while (IsValid != 1 ) {
+                    computersGo(&x, &y);
+                    IsValid= validGo(x, y);
+                }
+
             }
             //Winning Code goes here.
         }
@@ -82,9 +87,28 @@ int main() {
 }
 
 int validGo(int x, int y) {
-    //WIP
-    return 0;
+     //If the go is out of bounds
+    if (x > 3 || y > 3) {
+
+        return 2;
+    }
+
+    //If the go has been said before 
+    if (board[y][x] == 'X') {
+
+        return 1;
+    }
+    else if (board[y][x] == 'O') {
+        return 1;
+    }
+
+    //If the go is valid
+    if (x >= 0 && y >= 0 && x <= 2 && y <= 2) {
+        return 0;
+    }
 }
+
+
 
 
 void printboard() {
@@ -96,3 +120,54 @@ void printboard() {
         }
     }
 }
+
+
+char whoWon() {
+   
+    //rows
+    for (int i = 0; i <= 2;i++) {
+
+            if ('X' == board[i][0] && 'X' == board[i][1] && 'X'== board[i][2]) {
+                return 'X';
+            }
+            if ('O' == board[i][0] && 'O' == board[i][1] && 'O' == board[i][2]) {
+                return 'O';
+            }
+    }
+    //columns
+    for (int j = 0; j <= 2; j++) {
+
+        if ('X' == board[0][j] && 'X' == board[1][j] && 'X' == board[2][j]) {
+            return 'X';
+        }
+        if ('O' == board[0][j] && 'O' == board[1][j] && 'O' == board[2][j]) {
+            return 'O';
+        }
+    }
+
+    //Diagonals
+    if ('X' == board[0][0] && 'X' == board[1][1] && 'X' == board[2][2]) {
+        return 'X';
+    }
+    if ('X' == board[0][2] && 'X' == board[1][1] && 'X' == board[2][0]) {
+        return 'X';
+    }
+
+
+    if ('O' == board[0][0] && 'O' == board[1][1] && 'O' == board[2][2]) {
+        return 'O';
+    }
+    if ('O' == board[0][2] && 'O' == board[1][1] && 'O' == board[2][0]) {
+        return 'O';
+    }
+}
+
+//generate computers location
+void computersGo(int* px, int* py) {
+    int range;
+    range = (2 - 0) + 1;
+    srand(time(NULL));
+    *px = rand() % range + 0;
+    *py = rand() % range + 0;
+}
+
