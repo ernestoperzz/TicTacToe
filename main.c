@@ -1,19 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-char board[3][3] = { {' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '} };
+#include <time.h>
 
 void printboard();
 int validGo();
+void computersGo();
+char whoWon();
+
+
+char board[3][3] = { {' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '} };
 
 int main() {
     char CurrentGo = 'X', UserName[50];
-    int Score[2] = { 0, 0 };
+    int Score[2] = { 0, 0 }, PlayAgain = 0, FirstGo = 1;
     int y, x;
     char y_temp;
     
 
-    //Welcome User and get user name
+    //Welcome User and get user nameA2
     printf("Welcome to X's and O's. Please enter your username: ");
     fgets(UserName, sizeof(UserName), stdin);
 
@@ -25,18 +29,24 @@ int main() {
         }
     }
 
-    while (1 == 1) {
+    while (!PlayAgain) {
         //For loop for game. Will only run 9 times
         for (int i = 0; i != 9; i++) {
             if (CurrentGo == 'X') {
-                printf("Its your go now %s, Please enter your go.\n", UserName);
+                if (FirstGo == 0){
+                    printf("Its your go now %s, Please enter your go.\n", UserName);
+                    FirstGo = 1;
+                } else {
+                    printf("The computer went in place %c%i\n", (char)(y + 'A'), x);
+                }
+
                 printboard();
 
                 //While loop to continue asking untill a valid go.
                 int IsValid = 2;
                 while (IsValid != 0) {
                     printf("Enter your go: ");
-                    scanf_s(" %c%i", &y_temp, &x);
+                    scanf(" %c%i", &y_temp, &x);
 
                     //Stored as a char then convered to a valid cord.
                     if (y_temp >= 'a' && y_temp <= 'c') {
@@ -68,28 +78,72 @@ int main() {
                 }
                 //Give control to computer. Players turn ends here
                 CurrentGo = 'O';
-            }
-            if (CurrentGo == 'O') {
+            } else if (CurrentGo == 'O') {
+                //Start of computer go
                 int IsValid = 1;
-                while (IsValid != 1 ) {
+                //Run loop untill a valid move is found
+                while (IsValid != 0 ) {
+                    //Get random cords
                     computersGo(&x, &y);
+                    //Check if valid
                     IsValid= validGo(x, y);
                 }
 
-            }
-            //Winning Code goes here.
-        }
-        printf("Would you like to play again?");
-        //Printing the score and asking to play agian goes here.
+                //Place in board
+                board[y][x] = 'O';
+                //Make players turn again
+                CurrentGo = 'X';
 
-        
+            }
+
+            char Winner = whoWon();
+            if(Winner == 'X'){
+                printf("%s won the game.\n",UserName);
+                Score[0] += 1;
+                break;
+            }
+            if(Winner == 'O'){
+                printboard();
+                printf("The computer won the game.\n");
+                Score[1] += 1;
+                break;
+            }
+        }
+
+        if (whoWon() == ' ') printf("Nobody won!\n");
+
+
+        printf("The Current score is:\n%s:\t\t%i\nComputer:\t%i\n", UserName, Score[0], Score[1]);
+
+        char UserInput;
+        int ValidInput;
+        printf("Would you like to play again? (Y/N)");
+        scanf(" %c", &UserInput);
+        PlayAgain = 0;
+        switch (UserInput){
+            case 'Y':
+            case 'y':
+                for (int y = 0; y != 3; y++){
+                    for (int x = 0; x != 3; x++){
+                        board[y][x] = ' ';
+                    }
+                }
+                    FirstGo = 0;
+                    CurrentGo = 'X';
+
+                break;
+
+            default:
+                printf("Thanks for playing!");
+                return 0;
+        }
     }
 }
 
+
 int validGo(int x, int y) {
      //If the go is out of bounds
-    if (x > 3 || y > 3) {
-
+    if (x >= 3 || y >= 3) {
         return 2;
     }
 
@@ -102,10 +156,7 @@ int validGo(int x, int y) {
         return 1;
     }
 
-    //If the go is valid
-    if (x >= 0 && y >= 0 && x <= 2 && y <= 2) {
-        return 0;
-    }
+    return 0;
 }
 
 
@@ -128,9 +179,11 @@ char whoWon() {
     for (int i = 0; i <= 2;i++) {
 
             if ('X' == board[i][0] && 'X' == board[i][1] && 'X'== board[i][2]) {
+                
                 return 'X';
             }
             if ('O' == board[i][0] && 'O' == board[i][1] && 'O' == board[i][2]) {
+               
                 return 'O';
             }
     }
@@ -138,28 +191,37 @@ char whoWon() {
     for (int j = 0; j <= 2; j++) {
 
         if ('X' == board[0][j] && 'X' == board[1][j] && 'X' == board[2][j]) {
+             
             return 'X';
         }
         if ('O' == board[0][j] && 'O' == board[1][j] && 'O' == board[2][j]) {
+            
             return 'O';
         }
     }
 
     //Diagonals
     if ('X' == board[0][0] && 'X' == board[1][1] && 'X' == board[2][2]) {
+         
         return 'X';
     }
     if ('X' == board[0][2] && 'X' == board[1][1] && 'X' == board[2][0]) {
+        
         return 'X';
     }
 
 
     if ('O' == board[0][0] && 'O' == board[1][1] && 'O' == board[2][2]) {
+         
         return 'O';
     }
     if ('O' == board[0][2] && 'O' == board[1][1] && 'O' == board[2][0]) {
+         
         return 'O';
     }
+
+
+    return ' ';
 }
 
 //generate computers location
@@ -167,7 +229,12 @@ void computersGo(int* px, int* py) {
     int range;
     range = (2 - 0) + 1;
     srand(time(NULL));
-    *px = rand() % range + 0;
-    *py = rand() % range + 0;
+    *px = rand() % range;
+    *py = rand() % range;
 }
+
+
+
+
+
 
