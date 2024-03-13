@@ -3,8 +3,8 @@
 #include <time.h>
 
 void printboard();
-int validGo();
-void computersGo();
+int validGo(int x, int y);
+void computersGo(int* px, int* py);
 char whoWon();
 
 
@@ -33,11 +33,11 @@ int main() {
         //For loop for game. Will only run 9 times
         for (int i = 0; i != 9; i++) {
             if (CurrentGo == 'X') {
-                if (FirstGo == 0){
+                if (FirstGo == 1){
                     printf("Its your go now %s, Please enter your go.\n", UserName);
-                    FirstGo = 1;
+                    FirstGo = 0;
                 } else {
-                    printf("The computer went in place %c%i\n", (char)(y + 'A'), x);
+                    printf("The computer went in place %c%i\n", (char)(y + 'A'), x + 1);
                 }
 
                 printboard();
@@ -128,8 +128,8 @@ int main() {
                         board[y][x] = ' ';
                     }
                 }
-                    FirstGo = 0;
-                    CurrentGo = 'X';
+                FirstGo = 1;
+                CurrentGo = 'X';
 
                 break;
 
